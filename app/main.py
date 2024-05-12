@@ -27,7 +27,7 @@ def convert_heic_to_jpg(status_label):
             # if not os.path.exists(output_folder):
             #     os.makedirs(output_folder)
 
-            output_path = heic_path.replace(".heic", ".jpg")
+            output_path = heic_path.lower().replace(".heic", ".jpg")
 
             image.save(output_path, "JPEG")
 
