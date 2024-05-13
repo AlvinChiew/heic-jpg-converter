@@ -1,34 +1,7 @@
 from threading import Thread
 import customtkinter as ctk
 from tkinter import filedialog
-from PIL import Image
-from pillow_heif import register_heif_opener
-
-
-def convert_heic_to_jpg(heic_paths):
-    register_heif_opener()
-    if not heic_paths:
-        return "Please select HEIC image files."
-
-    result = ""
-    for heic_path in heic_paths:
-        try:
-            # time.sleep(5)
-            image = Image.open(heic_path)
-            image = image.convert("RGB")
-
-            output_path = heic_path.lower().replace(".heic", ".jpg")
-
-            image.save(output_path, "JPEG")
-
-            result = (
-                f"Conversion successful! Last converted image saved as {output_path}"
-            )
-
-        except Exception as e:
-            return f"Error converting image: {e}"
-
-    return result
+from converter import heic_to_jpg
 
 
 class HomeScreen(ctk.CTk):
@@ -44,7 +17,6 @@ class HomeScreen(ctk.CTk):
 
         result = "Please select HEIC image files."
         self.result_var = ctk.StringVar(value=result)
-        # result.set("Please select HEIC image files.")
 
         label = ctk.CTkLabel(
             main_frame,
@@ -81,22 +53,27 @@ class HomeScreen(ctk.CTk):
         self.result_label.pack(pady=(0, 20), expand=True)
 
     def click_convert_btn(self):
-        self.convert_button.configure(state="disabled")
-        self.status_label.configure(text="Status: RUNNING...")
-        self.status_progressbar.start()
-
+        self.set_running_state()
         thread = Thread(target=self.conversion_thread)
         thread.start()
 
     def conversion_thread(self):
         heic_paths = filedialog.askopenfilenames(filetypes=[("HEIC files", "*.heic")])
-        result = convert_heic_to_jpg(heic_paths)
-        self.result_var.set(result)
-        self.result_label.configure(width=len(result) * 7)
+        result = heic_to_jpg(heic_paths)
+        self.set_ready_state(result)
 
+    def set_running_state(self):
+        self.convert_button.configure(state="disabled")
+        self.status_label.configure(text="Status: RUNNING...")
+        self.status_progressbar.start()
+
+    def set_ready_state(self, result):
         self.convert_button.configure(state="normal")
         self.status_label.configure(text="Status: Ready")
         self.status_progressbar.stop()
+
+        self.result_var.set(result)
+        self.result_label.configure(width=len(result) * 7)
 
 
 def main():
