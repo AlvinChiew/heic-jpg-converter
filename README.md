@@ -1,5 +1,7 @@
 # HEIC to JPG Converter
 
+- Download: [here](https://github.com/AlvinChiew/heic-jpg-converter/releases/download/v0.1.0/HeicToJpg-v0.1.0-win-x64-portable.exe)
+
 An open-sourced standalone simple desktop application with one-click solution to convert single/multiple HEIC images to JPG.
 
 My dad requested this because **Windows Photos** charges MYR 4.00 for an extension to view HEIC image without the conversion feature and the internet has not offered a free conversion tool of both for desktop (and we never know if those tools are dodgy in the background).
